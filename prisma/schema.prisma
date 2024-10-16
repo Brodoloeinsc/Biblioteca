@@ -1,0 +1,41 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+    id String @id @default(uuid())
+    borrowed BorrowedBook[]
+    returnedBooks ReturnedBooks[]
+    name String
+    address String
+    celphone String
+    cpf String @unique
+}
+
+model Book {
+    id String @id @default(uuid())
+    name String
+    pages Int
+    releaseYear String
+    publisher String
+    author String
+    borrowed BorrowedBook?
+    returned ReturnedBooks[]
+}
+
+model BorrowedBook {
+    id String @id @default(uuid())
+    book Book @relation(fields: [bookId], references: [id])
+    bookId String @unique
+    user User @relation(fields: [userId], references: [id])
+    userId String 
+}
+
+model ReturnedBooks {
+    id String @id @default(uuid())
+    book Book @relation(fields: [bookId], references: [id])
+    bookId String @unique
+    user User @relation(fields: [userId], references: [id])
+    userId String 
+}
