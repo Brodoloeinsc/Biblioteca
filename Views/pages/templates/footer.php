@@ -1,5 +1,5 @@
 <footer>
-    <h3>Todos os direitos reservado &copy</h3>
+    <h5>Todos os direitos reservado &copy</h5>
 </footer>
 
 </body>
