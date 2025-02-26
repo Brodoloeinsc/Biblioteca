@@ -9,7 +9,7 @@
         }
 
         public function execute(){
-            $this->view->render(array('title'=>'Inicio'));
+            $this->view->render(array('title'=>'Inicio', 'active'=>'home'));
         }
 
     }
