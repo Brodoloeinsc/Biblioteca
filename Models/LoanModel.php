@@ -21,10 +21,7 @@
             try {
                 $dsn = "mysql:host={$this->host};dbname={$this->db};charset=utf8mb4";
                 $this->connection = new \PDO($dsn, $this->user, $this->pass);
-                
-                // Configurar PDO para lançar exceções em caso de erro
                 $this->connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-        
             } catch (\PDOException $e) {
                 die("Erro na conexão: " . $e->getMessage());
             }
@@ -35,8 +32,7 @@
                 $this->opendb();
                 $stmt = $this->connection->prepare("SELECT * FROM loans");
                 $stmt->execute();
-                $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-                return $result;
+                return $stmt->fetchAll(\PDO::FETCH_ASSOC);
             } catch (Exception $e) {
                 throw $e;
             }
@@ -48,8 +44,7 @@
                 $this->opendb();
                 $stmt = $this->connection->prepare("SELECT * FROM loans WHERE id = ?");
                 $stmt->execute([$id]);
-                $result = $stmt->fetch(\PDO::FETCH_ASSOC);
-                return $result;
+                return $stmt->fetch(\PDO::FETCH_ASSOC);
             }catch(Exception $e){
                 throw $e;
             }
@@ -58,28 +53,19 @@
         public function createLoan($book_id, $book_name, $person_name, $person_cellphone, $person_address, $cpf, $start_date, $end_date) {
             try {
                 $this->opendb();
-                
-                $stmt = $this->connection->prepare("
-                    INSERT INTO loans (book_id, book_name, person_name, person_cellphone, person_address, cpf, start_date, end_date)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                ");
-        
+                $stmt = $this->connection->prepare("INSERT INTO loans (book_id, book_name, person_name, person_cellphone, person_address, cpf, start_date, end_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
                 $stmt->execute([$book_id, $book_name, $person_name, $person_cellphone, $person_address, $cpf, $start_date, $end_date]);
-                
                 return true;
-        
-            } catch (PDOException $e) {
+            } catch (\PDOException $e) {
                 throw $e;
             }
         }
-        
 
         public function updateLoan($id, $end_date){
             try{
                 $this->opendb();
                 $stmt = $this->connection->prepare("UPDATE loans SET end_date = ? WHERE id = ?");
-                $result = $stmt->execute([$end_date, $id]);
-                return $result;
+                return $stmt->execute([$end_date, $id]);
             }catch(Exception $e){
                 throw $e;
             }
@@ -90,13 +76,31 @@
             try{
                 $this->opendb();
                 $stmt = $this->connection->prepare("DELETE FROM loans WHERE id = ?");
-                $result = $stmt->execute([$id]);
-                return $result;
+                return $stmt->execute([$id]);
             }catch(Exception $e){
                 throw $e;
             }
         }
 
+        public function countLoans(){
+            try {
+                $this->opendb();
+                $stmt = $this->connection->query("SELECT COUNT(*) as total FROM loans");
+                $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+                return $result['total'] ?? 0;
+            } catch (Exception $e) {
+                throw $e;
+            }
+        }
 
-
+        public function countActiveLoans(){
+            try {
+                $this->opendb();
+                $stmt = $this->connection->query("SELECT COUNT(*) as active FROM loans WHERE end_date >= CURDATE()");
+                $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+                return $result['active'] ?? 0;
+            } catch (Exception $e) {
+                throw $e;
+            }
+        }
     }

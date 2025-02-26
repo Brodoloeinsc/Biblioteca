@@ -125,4 +125,26 @@
             }
         }
 
+        public function countBooks(){
+            try {
+                $this->opendb();
+                $stmt = $this->connection->query("SELECT COUNT(*) as total FROM books");
+                $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+                return $result['total'] ?? 0;
+            } catch (Exception $e) {
+                throw $e;
+            }
+        }
+
+        public function countAvailableBooks(){
+            try {
+                $this->opendb();
+                $stmt = $this->connection->query("SELECT SUM(quantity) as available FROM books");
+                $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+                return $result['available'] ?? 0;
+            } catch (Exception $e) {
+                throw $e;
+            }
+        }
+
     }

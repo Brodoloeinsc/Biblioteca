@@ -51,7 +51,7 @@
                 }
             });
 
-            // Look All
+            // Get All
             \Router::route('livros', function() use ($book){
                 $books = $book->showBooks();
                 $this->view = new \Views\MainView('livros');
@@ -60,6 +60,19 @@
                 }else if(isset($_GET['success'])){
                     $this->view->render(array('title'=>'Ver Livros', 'active'=>'livros', 'books'=>$books, 'success'=>$_GET['success']));
                 }else{
+                    $this->view->render(array('title'=>'Ver Livros', 'active'=>'livros', 'books'=>$books));
+                }
+            });
+
+            // Get One
+            \Router::route('livros/unidade', function() use ($book){
+                if(isset($_GET['id'])){
+                    $book = $book->showBook($_GET['id']);
+                    $this->view = new \Views\MainView('livros/unidade');
+                    $this->view->render(array('title'=>'Ver Livro '.$book['name'].'', 'active'=>'livros', 'book'=>$book));
+                }else{
+                    $books = $book->showBooks();
+                    $this->view = new \Views\MainView('livros');
                     $this->view->render(array('title'=>'Ver Livros', 'active'=>'livros', 'books'=>$books));
                 }
             });

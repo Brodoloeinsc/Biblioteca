@@ -9,30 +9,29 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+        <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
             <div class="container">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <h2 class="navbar-brand">O Consolador</h2>
-                    </li>
-                </ul>
-                <ul class="navbar-nav navbar-right">
-                    <?php 
-                        foreach ($this->menuItems as $key => $item) {
-
-                            if(strtolower($item) == @$arr['active']){
+                <a class="navbar-brand" href="#">
+                    <h2>O Consolador</h2>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <?php 
+                            foreach ($this->menuItems as $key => $item) {
+                                $activeClass = (strtolower($item) == @$arr['active']) ? 'active' : '';
                                 echo "<li class='nav-item'>";
-                                echo "<a class='nav-link active' href='".INCLUDE_PATH."\\".strtolower($item)."'>$item</a>";
+                                echo "<a class='nav-link $activeClass' href='".INCLUDE_PATH."/".strtolower($item)."'>$item</a>";
                                 echo "</li>";
-                            }else{
-                                echo "<li class='nav-item'>";
-                                echo "<a class='nav-link' href='".INCLUDE_PATH."\\".strtolower($item)."'>$item</a>";
-                                echo "</li>";    
                             }
-
-                        }   
-                    ?>
-                </ul>
+                        ?>
+                    </ul>
+                </div>
             </div>
         </nav>
     </header>
+    <div class="d-flex flex-column min-vh-100">
+    <div class="flex-grow-1">
+

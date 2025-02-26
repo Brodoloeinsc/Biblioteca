@@ -58,11 +58,17 @@
             // Delete
             \Router::route('emprestimos/devolucao', function() use ($loan){
                 if(isset($_GET['id'])){
-                    $loan->deleteLoan($_GET['id']);
+                    $result = $loan->deleteLoan($_GET['id']);
                 }
-                $loans = $loan->getLoans();
-                $this->view = new \Views\MainView('emprestimos');
-                $this->view->render(array('title'=>'Devolucao', 'active'=>'emprestimos', 'loans'=>$loans));
+                if(isset($result) && $result == true){
+                    $loans = $loan->getLoans();
+                    $this->view = new \Views\MainView('emprestimos');
+                    $this->view->render(array('title'=>'Devolucao', 'active'=>'emprestimos', 'loans'=>$loans, 'success'=>'Livro devolvido com sucesso'));
+                }else{
+                    $loans = $loan->getLoans();
+                    $this->view = new \Views\MainView('emprestimos');
+                    $this->view->render(array('title'=>'Devolucao', 'active'=>'emprestimos', 'loans'=>$loans, 'error'=>'Houve algum erro na devolução do livro'));                    
+                }
             });
 
             // Get All
